@@ -21,6 +21,7 @@ class ProductController extends Controller
     }
     public function babyKid()
     {
+        compact('id', 'name');
         return view('product.baby-kid');
     }
 }

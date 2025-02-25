@@ -41,4 +41,4 @@ Route::prefix('category')->group(function () {
 
 Route::get('/user/{id}/name/{name}',[UserController::class,'index'])->name('user');
 
-Route::get('/sales', );
+Route::get('/sales', [HomeController::class, 'sales'])->name('sales');
