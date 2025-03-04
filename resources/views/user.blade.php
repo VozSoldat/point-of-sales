@@ -17,22 +17,20 @@
             <th>Nama</th>
             <th>ID Level Pengguna</th>
         </tr>
-        @foreach ($data as $d)
             <tr>
                 <td>
-                    {{ $d->user_id }}
+                    {{ $data->user_id }}
                 </td>
                 <td>
-                    {{ $d->username }}
+                    {{ $data->username }}
                 </td>
                 <td>
-                    {{ $d->nama }}
+                    {{ $data->nama }}
                 </td>
                 <td>
-                    {{ $d->level_id }}
+                    {{ $data->level_id }}
                 </td>
             </tr>
-        @endforeach
     </table>
 </body>
 
