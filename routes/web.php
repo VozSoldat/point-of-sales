@@ -21,3 +21,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+
+Route
+    ::group(['prefix' => 'user'], function () {
+       Route::get('/', [UserController::class, 'index'])->name('user.index');
+       Route::post('/list', [UserController::class, 'list'])->name('user.list');
+       Route::get('/create', [UserController::class, 'create'])->name('user.create');
+       Route::post('/', [UserController::class, 'store'])->name('user.store');
+       Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
+       Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+       Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
+       Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+    });
