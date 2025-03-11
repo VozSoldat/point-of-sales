@@ -58,6 +58,10 @@
                     "url": "{{ url('user/list') }}",
                     "dataType": "json",
                     "type": "POST",
+                    "data": function(d) {
+                        d.level_id = $('#level_id').val();
+                    }
+
                 },
                 columns: [{
                         data: "DT_RowIndex",
@@ -90,6 +94,9 @@
                         searchable: false
                     }
                 ]
+            });
+            $('#level_id').on('change', function() {
+                dataUser.ajax.reload();
             });
         });
     </script>

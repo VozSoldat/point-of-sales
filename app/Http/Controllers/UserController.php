@@ -22,13 +22,18 @@ class UserController extends Controller
             'list' => ['Home', 'User']
         ];
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => LevelModel::all(), 'activeMenu' => 'user']);
+        $activeMenu = 'user';
+        $level = LevelModel::all();
+
+        return view('user.index', compact('breadcrumb', 'page', 'level', 'activeMenu'));
     }
 
     public function list(Request $request): JsonResponse
     {
         $users = UserModel::select('user_id', 'username', 'nama', 'level_id')->with('level');
-        if ($request->level_id) $users->where('level_id', $request->level_id);
+        if ($request->level_id) {
+            $users->where('level_id', $request->level_id);
+        }
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('aksi', function ($user) {
@@ -108,7 +113,7 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'username' => 'required|string|min:3|unique:m_user,username, ' . $id .',user_id',
+            'username' => 'required|string|min:3|unique:m_user,username, ' . $id . ',user_id',
             'nama' => 'required|string|max:100',
             'password' => 'nullable|min:5',
             'level_id' => 'required|integer'
@@ -123,15 +128,16 @@ class UserController extends Controller
 
         return redirect('/user')->with('success', 'Data user berhasil diubah');
     }
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         $check = UserModel::find($id);
         if (!$check) {
             return redirect('/user')->with('error', 'Data user tidak ditemukan');
         }
-        try{
+        try {
             UserModel::destroy($id);
             return redirect('/user')->with('success', 'Data user berhasil dihapus');
-        }catch(QueryException $e){
+        } catch (QueryException $e) {
             return redirect('/user')->with('error', 'Data user gagal dihapys karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
