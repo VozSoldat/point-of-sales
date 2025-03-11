@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Models\Kategori;
@@ -46,7 +47,7 @@ Route
         Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
     });
 
-    Route
+Route
     ::group(['prefix' => 'kategori'], function () {
         Route::get('/', [KategoriController::class, 'index'])->name('kategori.index');
         Route::post('/list', [KategoriController::class, 'list'])->name('kategori.list');
@@ -56,4 +57,15 @@ Route
         Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
         Route::put('/{id}', [KategoriController::class, 'update'])->name('kategori.update');
         Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+    });
+Route
+    ::group(['prefix' => 'supplier'], function () {
+        Route::get('/', [SupplierController::class, 'index'])->name('supplier.index');
+        Route::post('/list', [SupplierController::class, 'list'])->name('supplier.list');
+        Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
+        Route::post('/', [SupplierController::class, 'store'])->name('supplier.store');
+        Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier.show');
+        Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
+        Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+        Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
