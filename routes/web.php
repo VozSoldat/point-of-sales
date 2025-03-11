@@ -7,6 +7,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Models\Kategori;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,4 +44,16 @@ Route
         Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
         Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
         Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+    });
+
+    Route
+    ::group(['prefix' => 'kategori'], function () {
+        Route::get('/', [KategoriController::class, 'index'])->name('kategori.index');
+        Route::post('/list', [KategoriController::class, 'list'])->name('kategori.list');
+        Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
+        Route::post('/', [KategoriController::class, 'store'])->name('kategori.store');
+        Route::get('/{id}', [KategoriController::class, 'show'])->name('kategori.show');
+        Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
+        Route::put('/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+        Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
     });
