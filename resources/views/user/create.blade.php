@@ -5,7 +5,8 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ url('user') }}" class="form-horizontal"> @csrf <div class="form-group row"> <label
+            <form method="POST" action="{{ url('user') }}" class="form-horizontal"> @csrf
+                <div class="form-group row"> <label
                         class="col-1 control-label col-form-label">Level</label>
                     <div class="col-11"> <select class="form-control" id="level_id" name="level_id" required>
                             <option value="">- Pilih Level -</option>

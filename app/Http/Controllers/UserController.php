@@ -34,7 +34,7 @@ class UserController extends Controller
         if ($request->level_id) {
             $users->where('level_id', $request->level_id);
         }
-        return DataTables::of($users)
+        $temp=DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('aksi', function ($user) {
                 $btn = '<a href="' . url('/user/' . $user->user_id) . '" class="btn btn-info btnsm">Detail</a> ';
@@ -44,6 +44,8 @@ class UserController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+            // dd($temp);
+            return $temp;
     }
 
     public function create(): View
