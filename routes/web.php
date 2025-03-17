@@ -31,6 +31,10 @@ Route
         Route::post('/list', [UserController::class, 'list'])->name('user.list');
         Route::get('/create', [UserController::class, 'create'])->name('user.create');
         Route::post('/', [UserController::class, 'store'])->name('user.store');
+
+        Route::get('/create_ajax', [UserController::class, 'create_ajax'])->name('user.create_ajax');
+        Route::post('ajax', [UserController::class, 'store_ajax'])->name('user.ajax');
+
         Route::get('/{id}', [UserController::class, 'show'])->name('user.show');
         Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::put('/{id}', [UserController::class, 'update'])->name('user.update');
