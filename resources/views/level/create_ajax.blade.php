@@ -1,4 +1,4 @@
-<form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
+<form action="{{ url('/level/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
         class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,7 +8,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label>Level Pengguna</label>
                     <select name="level_id" id="level_id" class="form-control" required>
                         <option value="">- Pilih Level -</option>
@@ -17,16 +17,19 @@
                         @endforeach
                     </select>
                     <small id="error-level_id" class="error-text form-text text-danger"></small>
+                </div> --}}
+                <div class="form-group">
+                    <label>Kode</label>
+                    <input value="" type="text" name="level_kode" id="level_kode" class="form-control"
+                        required>
+                    <small id="error-levelname" class="error-text form-text text-danger"></small>
                 </div>
-                <div class="form-group"> <label>Username</label> <input value="" type="text" name="username"
-                        id="username" class="form-control" required> <small id="error-username"
-                        class="error-text form-text text-danger"></small> </div>
-                <div class="form-group"> <label>Nama</label> <input value="" type="text" name="nama"
-                        id="nama" class="form-control" required> <small id="error-nama"
-                        class="error-text form-text text-danger"></small> </div>
-                <div class="form-group"> <label>Password</label> <input value="" type="password" name="password"
-                        id="password" class="form-control" required> <small id="error-password"
-                        class="error-text form-text text-danger"></small> </div>
+                <div class="form-group">
+                    <label>Nama</label>
+                    <input value="" type="text" name="level_nama" id="level_nama" class="form-control"
+                        required>
+                    <small id="error-nama" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <div class="modal-footer"> <button type="button" data-dismiss="modal"
                     class="btn btn-warning">Batal</button> <button type="submit"
@@ -42,21 +45,16 @@
                     required: true,
                     number: true
                 },
-                username: {
+                level_kode: {
                     required: true,
                     minlength: 3,
                     maxlength: 20
                 },
-                nama: {
+                level_nama: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
                 },
-                password: {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 20
-                }
             },
             submitHandler: function(form) {
                 $.ajax({

@@ -196,7 +196,12 @@ class UserController extends Controller
     public function update_ajax(Request $request, $id)
     { // cek apakah request dari ajax
         if ($request->ajax() || $request->wantsJson()) {
-            $rules = ['level_id' => 'required|integer', 'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id', 'nama' => 'required|max:100', 'password' => 'nullable|min:6|max:20'];
+            $rules = [
+                'level_id' => 'required|integer',
+                'username' => 'required|max:20|unique:m_user,username,' . $id . ',user_id',
+                'nama' => 'required|max:100',
+                'password' => 'nullable|min:6|max:20'
+            ];
             // use Illuminate\Support\Facades\Validator;
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {

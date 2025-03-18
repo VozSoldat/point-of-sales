@@ -53,10 +53,20 @@ Route
         Route::post('/list', [LevelController::class, 'list'])->name('level.list');
         Route::get('/create', [LevelController::class, 'create'])->name('level.create');
         Route::post('/', [LevelController::class, 'store'])->name('level.store');
+        Route::get('/create_ajax', [LevelController::class, 'create_ajax'])->name('level.create_ajax');
+        Route::post('ajax', [LevelController::class, 'store_ajax'])->name('level.ajax');
+
         Route::get('/{id}', [LevelController::class, 'show'])->name('level.show');
         Route::get('/{id}/edit', [LevelController::class, 'edit'])->name('level.edit');
         Route::put('/{id}', [LevelController::class, 'update'])->name('level.update');
-        Route::delete('/{id}', [LevelController::class, 'destroy'])->name('level.destroy');
+
+        Route::get('/{id}/edit_ajax', [LevelController::class, 'edit_ajax'])->name('level.edit_ajax');
+        Route::put('/{id}/update_ajax', [LevelController::class, 'update_ajax'])->name('level.update_ajax');
+
+        Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
+
+        Route::delete('/{id}', [LevelController::class, 'destroy'])->name('user.destroy');
     });
 
 Route

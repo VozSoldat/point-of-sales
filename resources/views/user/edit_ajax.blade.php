@@ -20,7 +20,9 @@
                         data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group"> <label>Level Pengguna</label> <select name="level_id" id="level_id"
+                    <div class="form-group">
+                        <label>Level Pengguna</label>
+                        <select name="level_id" id="level_id"
                             class="form-control" required>
                             <option value="">- Pilih Level -</option>
                             @foreach ($level as $l)
