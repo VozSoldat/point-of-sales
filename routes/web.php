@@ -42,6 +42,9 @@ Route
         Route::get('/{id}/edit_ajax', [UserController::class, 'edit_ajax'])->name('user.edit_ajax');
         Route::put('/{id}/update_ajax', [UserController::class, 'update_ajax'])->name('user.update_ajax');
 
+        Route::get('/{id}/delete_ajax', [UserController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
+
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 Route
@@ -89,4 +92,3 @@ Route
         Route::put('/{id}', [BarangController::class, 'update'])->name('barang.update');
         Route::delete('/{id}', [BarangController::class, 'destroy'])->name('barang.destroy');
     });
-
