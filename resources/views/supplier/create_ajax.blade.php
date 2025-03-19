@@ -1,34 +1,40 @@
-<form action="{{ url('/level/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
+<form action="{{ url('/supplier/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
         class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Level</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Supplier</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 {{-- <div class="form-group">
-                    <label>Level Pengguna</label>
-                    <select name="level_id" id="level_id" class="form-control" required>
-                        <option value="">- Pilih Level -</option>
-                        @foreach ($level as $l)
-                            <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                    <label>Supplier Pengguna</label>
+                    <select name="supplier_id" id="supplier_id" class="form-control" required>
+                        <option value="">- Pilih Supplier -</option>
+                        @foreach ($supplier as $l)
+                            <option value="{{ $l->supplier_id }}">{{ $l->supplier_nama }}</option>
                         @endforeach
                     </select>
-                    <small id="error-level_id" class="error-text form-text text-danger"></small>
+                    <small id="error-supplier_id" class="error-text form-text text-danger"></small>
                 </div> --}}
                 <div class="form-group">
                     <label>Kode</label>
-                    <input value="" type="text" name="level_kode" id="level_kode" class="form-control"
+                    <input value="" type="text" name="supplier_kode" id="supplier_kode" class="form-control"
                         required>
-                    <small id="error-level_kode" class="error-text form-text text-danger"></small>
+                    <small id="error-supplier_kode" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama</label>
-                    <input value="" type="text" name="level_nama" id="level_nama" class="form-control"
+                    <input value="" type="text" name="supplier_nama" id="supplier_nama" class="form-control"
                         required>
-                    <small id="error-level_nama" class="error-text form-text text-danger"></small>
+                    <small id="error-supplier_nama" class="error-text form-text text-danger"></small>
+                </div>
+                <div class="form-group">
+                    <label>Alamat</label>
+                    <input value="" type="text" name="supplier_alamat" id="supplier_alamat" class="form-control"
+                        required>
+                    <small id="error-supplier_alamat" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer"> <button type="button" data-dismiss="modal"
@@ -41,20 +47,25 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                level_id: {
+                supplier_id: {
                     required: true,
                     number: true
                 },
-                level_kode: {
+                supplier_kode: {
                     required: true,
                     minlength: 3,
                     maxlength: 20
                 },
-                level_nama: {
+                supplier_nama: {
                     required: true,
                     minlength: 3,
                     maxlength: 100
                 },
+                supplier_alamat: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 300
+                }
             },
             submitHandler: function(form) {
                 $.ajax({

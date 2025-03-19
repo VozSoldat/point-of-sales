@@ -96,9 +96,19 @@ Route
         Route::post('/list', [SupplierController::class, 'list'])->name('supplier.list');
         Route::get('/create', [SupplierController::class, 'create'])->name('supplier.create');
         Route::post('/', [SupplierController::class, 'store'])->name('supplier.store');
+        Route::get('/create_ajax', [SupplierController::class, 'create_ajax'])->name('supplier.create_ajax');
+        Route::post('ajax', [SupplierController::class, 'store_ajax'])->name('supplier.ajax');
+
         Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier.show');
         Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier.edit');
         Route::put('/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+
+        Route::get('/{id}/edit_ajax', [SupplierController::class, 'edit_ajax'])->name('supplier.edit_ajax');
+        Route::put('/{id}/update_ajax', [SupplierController::class, 'update_ajax'])->name('supplier.update_ajax');
+
+        Route::get('/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
+
         Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
     });
 Route
