@@ -1,32 +1,32 @@
-<form action="{{ url('/level/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
+<form action="{{ url('/kategori/ajax') }}" method="POST" id="form-tambah"> @csrf <div id="modal-master"
         class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Level</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Data Kategori</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 {{-- <div class="form-group">
-                    <label>Level Pengguna</label>
-                    <select name="level_id" id="level_id" class="form-control" required>
-                        <option value="">- Pilih Level -</option>
-                        @foreach ($level as $l)
-                            <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                    <label>Kategori Pengguna</label>
+                    <select name="kategori_id" id="kategori_id" class="form-control" required>
+                        <option value="">- Pilih Kategori -</option>
+                        @foreach ($kategori as $l)
+                            <option value="{{ $l->kategori_id }}">{{ $l->kategori_nama }}</option>
                         @endforeach
                     </select>
-                    <small id="error-level_id" class="error-text form-text text-danger"></small>
+                    <small id="error-kategori_id" class="error-text form-text text-danger"></small>
                 </div> --}}
                 <div class="form-group">
                     <label>Kode</label>
-                    <input value="" type="text" name="level_kode" id="level_kode" class="form-control"
+                    <input value="" type="text" name="kategori_kode" id="kategori_kode" class="form-control"
                         required>
-                    <small id="error-levelname" class="error-text form-text text-danger"></small>
+                    <small id="error-kategoriname" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
                     <label>Nama</label>
-                    <input value="" type="text" name="level_nama" id="level_nama" class="form-control"
+                    <input value="" type="text" name="kategori_nama" id="kategori_nama" class="form-control"
                         required>
                     <small id="error-nama" class="error-text form-text text-danger"></small>
                 </div>
@@ -41,16 +41,16 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                level_id: {
+                kategori_id: {
                     required: true,
                     number: true
                 },
-                level_kode: {
+                kategori_kode: {
                     required: true,
                     minlength: 3,
                     maxlength: 20
                 },
-                level_nama: {
+                kategori_nama: {
                     required: true,
                     minlength: 3,
                     maxlength: 100

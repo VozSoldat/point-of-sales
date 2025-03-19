@@ -75,9 +75,19 @@ Route
         Route::post('/list', [KategoriController::class, 'list'])->name('kategori.list');
         Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
         Route::post('/', [KategoriController::class, 'store'])->name('kategori.store');
+        Route::get('/create_ajax', [KategoriController::class, 'create_ajax'])->name('kategori.create_ajax');
+        Route::post('ajax', [KategoriController::class, 'store_ajax'])->name('kategori.ajax');
+
         Route::get('/{id}', [KategoriController::class, 'show'])->name('kategori.show');
         Route::get('/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
         Route::put('/{id}', [KategoriController::class, 'update'])->name('kategori.update');
+
+        Route::get('/{id}/edit_ajax', [KategoriController::class, 'edit_ajax'])->name('kategori.edit_ajax');
+        Route::put('/{id}/update_ajax', [KategoriController::class, 'update_ajax'])->name('kategori.update_ajax');
+
+        Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
+
         Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
     });
 Route

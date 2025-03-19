@@ -1,4 +1,4 @@
-@empty($level)
+@empty($kategori)
     <div id="modal-master" class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,12 +8,12 @@
             <div class="modal-body">
                 <div class="alert alert-danger">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5> Data yang anda cari tidak ditemukan
-                </div> <a href="{{ url('/level') }}" class="btn btn-warning">Kembali</a>
+                </div> <a href="{{ url('/kategori') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ url('/level/' . $level->level_id . '/update_ajax') }}" method="POST" id="form-edit"> @csrf
+    <form action="{{ url('/kategori/' . $kategori->kategori_id . '/update_ajax') }}" method="POST" id="form-edit"> @csrf
         @method('PUT') <div id="modal-master" class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -36,13 +36,13 @@
                     </div> --}}
                     <div class="form-group">
                         <label>Kode</label>
-                        <input value="{{ $level->level_kode }}" type="text" name="level_kode" id="level_kode"
+                        <input value="{{ $kategori->kategori_kode }}" type="text" name="kategori_kode" id="kategori_kode"
                             class="form-control" required>
                         <small id="error-kategori_kode" class="error-text form-text text-danger"></small>
                     </div>
                     <div class="form-group">
                         <label>Nama</label>
-                        <input value="{{ $level->level_nama }}" type="text" name="level_nama" id="level_nama"
+                        <input value="{{ $kategori->kategori_nama }}" type="text" name="kategori_nama" id="kategori_nama"
                             class="form-control" required>
                         <small id="error-kategori_nama" class="error-text form-text text-danger"></small>
                     </div>
@@ -62,12 +62,12 @@
                     //     required: true,
                     //     number: true
                     // },
-                    level_kode: {
+                    kategori_kode: {
                         required: true,
                         minlength: 3,
                         maxlength: 20
                     },
-                    level_nama: {
+                    kategori_nama: {
                         required: true,
                         minlength: 3,
                         maxlength: 100

@@ -6,6 +6,8 @@
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('kategori/create') }}">Tambah</a>
+                <button onclick="modalAction('{{ url('kategori/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah
+                    Ajax</button>
             </div>
         </div>
         <div class="card-body">
@@ -15,6 +17,7 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
+
             <table class="table table-bordered table-striped table-hover table-sm" id="table_kategori">
                 <thead>
                     <tr>
@@ -27,6 +30,8 @@
             </table>
         </div>
     </div>
+    <div id="myModal" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static"
+        data-keyboard="false" data-width="75%" aria-hidden="true"></div>
 @endsection
 
 @push('css')
@@ -34,13 +39,23 @@
 
 @push('js')
     <script>
+        function modalAction(url = '') {
+            $('#myModal').load(url, function() {
+                $('#myModal').modal('show');
+            });
+        }
+
+        var dataUser;
         $(document).ready(function() {
-            var dataUser = $('#table_kategori').DataTable({
+            dataUser = $('#table_kategori').DataTable({
                 serverSide: true,
                 ajax: {
-                    "url": "{{ route('kategori.list') }}",
+                    "url": "{{ url('kategori/list') }}",
                     "dataType": "json",
                     "type": "POST",
+                    // "data": function(d) {
+                    //     d.level_id = $('#level_id').val();
+                    // }
                 },
                 columns: [{
                         data: "DT_RowIndex",
@@ -68,7 +83,7 @@
                     }
                 ]
             });
-            // $('#level_id').on('change', function() {
+            // $('#kategori_id').on('change', function() {
             //     dataUser.ajax.reload();
             // });
         });

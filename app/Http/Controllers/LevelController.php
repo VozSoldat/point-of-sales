@@ -175,7 +175,7 @@ class LevelController extends Controller
             LevelModel::create($request->all());
             return response()->json([
                 'status' => true,
-                'message' => 'Data user berhasil disimpan.'
+                'message' => 'Data level berhasil disimpan.'
             ]);
         }
         redirect('/');
