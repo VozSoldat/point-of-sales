@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
 </head>
 
-<body class="hold-transition login-page">
-    <div class="login-box">
+<body class="hold-transition register-page">
+    <div class="register-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
                 <a href="{{ url('/') }}" class="h1">
@@ -23,8 +23,18 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                <form action="{{ url('login') }}" method="POST" id="form-login">
+                <form action="{{ route('register') }}" method="POST" id="form-register">
                     @csrf
+                    <div class="input-group mb-3">
+                        <input type="text" id="nama" name="nama" class="form-control"
+                            placeholder="Nama Lengkap" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                        <small id="error-username" class="error-text text-danger"></small>
+                    </div>
                     <div class="input-group mb-3">
                         <input type="text" id="username" name="username" class="form-control"
                             placeholder="Username" />
@@ -45,17 +55,23 @@
                         </div>
                         <small id="error-password" class="error-text text-danger"></small>
                     </div>
-                    <div class="row">
-                        <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember"><label for="remember">Remember Me</label>
+                    <div class="input-group mb-3">
+                        <select name="level_id" class="form-control">
+                            <option value="">- Pilih Level -</option>
+                            @foreach ($level as $l)
+                                <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                            @endforeach
+                        </select>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <small id="error-level_id" class="error-text text-danger"></small>
+                    </div>
+                    <div class="row">
                         <div class="col-4">
-                            <button type="button" onclick="window.location = '{{ route('register') }}'" class="btn btn-secondary btn-block">Register</button>
-                        </div>
-                        <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
                         </div>
                     </div>
                 </form>
@@ -75,8 +91,12 @@
             }
         });
         $(document).ready(() => {
-            $("#form-login").validate({
+            $("#form-register").validate({
                 rules: {
+                    nama: {
+                        required: true,
+                        minlength: 4,
+                    },
                     username: {
                         required: true,
                         minlength: 4,
@@ -86,6 +106,10 @@
                         required: true,
                         minlength: 6,
                         maxlength: 20
+                    },
+                    level_id: {
+                        required: true,
+                        number: true
                     }
                 },
                 submitHandler: form => {

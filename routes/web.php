@@ -27,16 +27,17 @@ use Illuminate\Support\Facades\Route;
 Route::pattern('id', '[0-9]+');
 
 Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'postlogin']);
+Route::post('login', [AuthController::class, 'postLogin']);
 Route::get('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-
+Route::get('register', [AuthController::class, 'register'])->name('register');
+Route::post('register', [AuthController::class, 'postRegister']);
 
 Route::middleware(['auth'])->group(function () {
     // masukkan semua route yang perlu autentikasi di sini
 
     Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-    Route::middleware(['authorize:ADM'])->group(function () {
+    Route::middleware(['authorize:ADM,MNG'])->group(function () {
         Route
             ::group(['prefix' => 'user'], function () {
                 Route::get('/', [UserController::class, 'index'])->name('user.index');
