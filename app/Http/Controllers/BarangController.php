@@ -8,6 +8,7 @@ use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\LevelModel;
 use App\Models\UserModel;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -367,5 +368,18 @@ class BarangController extends Controller
 
         $writer->save('php://output');
         exit;
+    }
+
+    public function export_pdf(){
+        $barang = Barang::select('kategori_id', 'barang_kode', 'barang_nama', 'harga_beli', 'harga_jual')
+            ->orderBy('kategori_id')
+            ->with('kategori')
+            ->get();
+        $pdf = Pdf::loadview('barang.export_pdf', compact('barang'));
+        $pdf->setPaper('a4','portrait');
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->render();
+
+        return $pdf->stream('Data Barang'. date('Y-m-d H:i:s' . ' .pdf'));
     }
 }
