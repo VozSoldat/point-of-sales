@@ -80,6 +80,6 @@ class AuthController extends Controller
                 'message' => 'Data user berhasil disimpan.'
             ]);
         }
-        redirect('/login');
+        redirect('login');
     }
 }
