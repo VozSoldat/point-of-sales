@@ -81,6 +81,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/delete_ajax', [LevelController::class, 'confirm_ajax']);
                 Route::delete('/{id}/delete_ajax', [LevelController::class, 'delete_ajax']);
 
+                Route::get('/import', [LevelController::class, 'import'])->name('level.import');
+                Route::post('/import_ajax', [LevelController::class, 'import_ajax'])->name('level.import_ajax');
+                Route::get('/export_excel', [LevelController::class, 'export_excel'])->name('level.export_excel');
+                Route::get('/export_pdf', [LevelController::class, 'export_pdf'])->name('level.export_pdf');
+
                 Route::delete('/{id}', [LevelController::class, 'destroy'])->name('user.destroy');
             });
 
