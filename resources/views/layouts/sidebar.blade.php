@@ -13,6 +13,11 @@
                         class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </a> </li>
+            <li class="nav-item"> <a href="{{ url('/profil') }}"
+                    class="nav-link {{ $activeMenu == 'profil' ? 'active' : '' }} "> <i
+                        class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Foto Profil</p>
+                </a> </li>
             <li class="nav-header">Data Pengguna</li>
             <li class="nav-item"> <a href="{{ url('/level') }}"
                     class="nav-link {{ $activeMenu == 'level' ? 'active' : '' }} "> <i

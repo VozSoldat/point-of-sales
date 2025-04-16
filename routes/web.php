@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -34,9 +35,10 @@ Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('register', [AuthController::class, 'postRegister']);
 
 Route::middleware(['auth'])->group(function () {
-    // masukkan semua route yang perlu autentikasi di sini
-
     Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+    Route::get('/profil', [ProfilController::class, 'index']);
+    Route::post('/profil/upload-photo', [ProfilController::class, 'upload_photo'])->name('profile.upload');
+
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
         Route
             ::group(['prefix' => 'user'], function () {
@@ -100,6 +102,11 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::get('/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
                 Route::delete('/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
+                Route::get('/import', [KategoriController::class, 'import'])->name('kategori.import');
+                Route::post('/import_ajax', [KategoriController::class, 'import_ajax'])->name('kategori.import_ajax');
+
+                Route::get('/export_excel', [KategoriController::class, 'export_excel'])->name('kategori.export_excel'); // export excel\
+                Route::get('/export_pdf', [KategoriController::class, 'export_pdf'])->name('kategori.export_pdf');
 
                 Route::delete('/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
             });
