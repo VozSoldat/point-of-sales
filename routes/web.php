@@ -61,6 +61,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/{id}/delete_ajax', [UserController::class, 'delete_ajax']);
 
                 Route::delete('/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+
+                Route::get('/import', [UserController::class, 'import'])->name('user.import');
+                Route::post('/import_ajax', [UserController::class, 'import_ajax'])->name('user.import_ajax');
+                Route::get('/export_excel', [UserController::class, 'export_excel'])->name('user.export_excel');
+                Route::get('/export_pdf', [UserController::class, 'export_pdf'])->name('user.export_pdf');
             });
         Route
             ::group(['prefix' => 'level'], function () {
