@@ -135,6 +135,12 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
 
                 Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+
+                Route::get('/import', [SupplierController::class, 'import'])->name('supplier.import');
+                Route::post('/import_ajax', [SupplierController::class, 'import_ajax'])->name('supplier.import_ajax');
+
+                Route::get('/export_excel', [SupplierController::class, 'export_excel'])->name('supplier.export_excel'); // export excel\
+                Route::get('/export_pdf', [SupplierController::class, 'export_pdf'])->name('supplier.export_pdf');
             });
         Route
             ::group(['prefix' => 'barang'], function () {
