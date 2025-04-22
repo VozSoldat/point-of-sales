@@ -27,8 +27,8 @@
                 <div class="form-group" id="barang-container">
                     <div class="form-row align-items-end mt-3">
                         <div class="col-md-4">
-                            <label for="detail.barang_id[]">Nama Barang</label>
-                            <select name="detail.barang_id[]" class="form-control">
+                            <label for="barang_id[]">Nama Barang</label>
+                            <select name="barang_id[]" class="form-control">
                                 <option value="">- Pilih Barang -</option>
                                 @foreach ($barang as $l)
                                     <option value="{{ $l->barang_id }}">{{ $l->barang_nama }}</option>
@@ -36,16 +36,16 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="detail.harga[]">Harga Barang</label>
-                            <input type="number" name="detail.harga[]" class="form-control" readonly>
+                            <label for="harga[]">Harga Barang</label>
+                            <input type="number" name="harga[]" class="form-control" readonly>
                         </div>
                         <div class="col-md-2">
-                            <label for="detail.stok[]">Stok</label>
-                            <input type="number" name="detail.stok[]" class="form-control" readonly>
+                            <label for="stok[]">Stok</label>
+                            <input type="number" name="stok[]" class="form-control" readonly>
                         </div>
                         <div class="col-md-2">
-                            <label for="detail.jumlah[]">Jumlah</label>
-                            <input type="number" name="detail.jumlah[]" class="form-control" placeholder="Masukkan jumlah">
+                            <label for="jumlah[]">Jumlah</label>
+                            <input type="number" name="jumlah[]" class="form-control" placeholder="Masukkan jumlah">
                         </div>
                         <div class="col-md-1 d-flex">
                             <button type="button" class="btn btn-danger btn-sm mt-auto remove-row">✕</button>
@@ -125,14 +125,14 @@
             @json($stok); // pastikan ini sudah berisi semua data stok (dengan barang_id dan stok_tanggal)
 
         // Event listener untuk perubahan pilihan barang di semua baris
-        $('#barang-container').on('change', 'select[name="detail.barang_id[]"]', function() {
+        $('#barang-container').on('change', 'select[name="barang_id[]"]', function() {
             const selectedId = $(this).val();
             const row = $(this).closest('.form-row');
 
             // Ambil data harga berdasarkan barang_id
             const barang = hargaData.find(item => item.barang_id == selectedId);
             const harga = barang ? barang.harga_jual : '';
-            row.find('input[name="detail.harga[]"]').val(harga);
+            row.find('input[name="harga[]"]').val(harga);
 
             // Ambil stok terbaru berdasarkan barang_id
             const stokTerkait = stokData.filter(s => s.barang_id == selectedId);
@@ -140,7 +140,7 @@
             const stokTerbaru = stokTerkait[0];
             const stok = stokTerbaru ? stokTerbaru.stok_jumlah : '';
 
-            row.find('input[name="detail.stok[]"]').val(stok);
+            row.find('input[name="stok[]"]').val(stok);
         });
 
 
@@ -148,7 +148,7 @@
         const template = `
         <div class="form-row align-items-end mt-3">
     <div class="col-md-4">
-        <select name="detail.barang_id[]" class="form-control">
+        <select name="barang_id[]" class="form-control">
             <option value="">- Pilih Barang -</option>
             @foreach ($barang as $l)
                 <option value="{{ $l->barang_id }}">{{ $l->barang_nama }}</option>
@@ -156,13 +156,13 @@
         </select>
     </div>
     <div class="col-md-3">
-        <input type="number" name="detail.harga[]" class="form-control" readonly>
+        <input type="number" name="harga[]" class="form-control" readonly>
     </div>
     <div class="col-md-2">
-        <input type="number" name="detail.stok[]" class="form-control" readonly>
+        <input type="number" name="stok[]" class="form-control" readonly>
     </div>
     <div class="col-md-2">
-        <input type="number" name="detail.jumlah[]" class="form-control" placeholder="Masukkan jumlah">
+        <input type="number" name="jumlah[]" class="form-control" placeholder="Masukkan jumlah">
     </div>
     <div class="col-md-1 d-flex">
         <button type="button" class="btn btn-danger btn-sm mt-auto remove-row">✕</button>

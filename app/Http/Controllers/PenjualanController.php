@@ -28,7 +28,7 @@ class PenjualanController extends Controller
     }
     public function list(Request $request): JsonResponse
     {
-        $penjualans = Penjualan::select('penjualan_id','pembeli', 'penjualan_kode', 'penjualan_tanggal', 'user_id')->with('user');
+        $penjualans = Penjualan::select('penjualan_id', 'pembeli', 'penjualan_kode', 'penjualan_tanggal', 'user_id')->with('user');
         // if ($request->kategori_id) {
         //     $penjualans->where('kategori_id', $request->kategori_id);
         // }
@@ -83,20 +83,43 @@ class PenjualanController extends Controller
 
             $penjualan = new Penjualan();
             $penjualan->pembeli = $request->pembeli;
-            $penjualan->user_id = 1;
+            $penjualan->user_id = Auth::user()->user_id;
             $penjualan->pembeli = $request->pembeli;
             $penjualan->penjualan_kode = $request->penjualan_kode;
             $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
             $penjualan->save();
 
-            foreach ($request->detail as $item) {
+            // foreach ($request->detail as $item) {
+            //     $item = new DetailPenjualan();
+            //     $item->penjualan_id = $penjualan->penjualan_id;
+            //     $item->barang_id = $request->detail->barang_id;
+            //     $item->harga = $request->detail->harga;
+            //     $item->jumlah = $request->detail->jumlah;
+            //     $item->save();
+            // }
+
+            for($i = 0; $i < count($request->barang_id); $i++) {
                 $detail = new DetailPenjualan();
                 $detail->penjualan_id = $penjualan->penjualan_id;
-                $detail->barang_id = $request->detail->barang_id;
-                $detail->harga = $request->detail->harga;
-                $detail->jumlah = $request->detail->jumlah;
+                $detail->barang_id = $request->barang_id[$i];
+                $detail->harga = $request->harga[$i];
+                $detail->jumlah = $request->jumlah[$i];
                 $detail->save();
             }
+
+            // $barang_ids = $request->input('detail.barang_id');
+            // $hargas = $request->input('detail.harga');
+            // $jumlahs = $request->input('detail.jumlah');
+
+            // for ($i = 0; $i < count($barang_ids); $i++) {
+            //     $detail = new DetailPenjualan();
+            //     $detail->penjualan_id = $penjualan->penjualan_id;
+            //     $detail->barang_id = $barang_ids[$i];
+            //     $detail->harga = $hargas[$i];
+            //     $detail->jumlah = $jumlahs[$i];
+            //     $detail->save();
+            // }
+
 
             return response()->json([
                 'status' => true,
