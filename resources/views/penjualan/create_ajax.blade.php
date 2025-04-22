@@ -135,10 +135,18 @@
             row.find('input[name="harga[]"]').val(harga);
 
             // Ambil stok terbaru berdasarkan barang_id
-            const stokTerkait = stokData.filter(s => s.barang_id == selectedId);
-            stokTerkait.sort((a, b) => new Date(b.stok_tanggal) - new Date(a.stok_tanggal));
-            const stokTerbaru = stokTerkait[0];
-            const stok = stokTerbaru ? stokTerbaru.stok_jumlah : '';
+            // const stokTerkait = stokData.filter(s => s.barang_id == selectedId);
+            // stokTerkait.sort((a, b) => new Date(b.stok_tanggal) - new Date(a.stok_tanggal));
+            // const stokTerbaru = stokTerkait[0];
+            // const stok = stokTerbaru ? stokTerbaru.stok_jumlah : '';
+
+            // Filter data berdasarkan barang_id
+            const filtered = stokData.filter(item => item.barang_id == selectedId);
+
+            // Hitung jumlah entry dan opname
+            const stok = filtered.reduce((sum, item) => sum + Number(item.stok_jumlah), 0);
+            // const totalEntry = filtered.reduce((sum, item) => sum + Number(item.), 0);
+            // const totalOpname = filtered.reduce((sum, item) => sum + Number(item.opname), 0);
 
             row.find('input[name="stok[]"]').val(stok);
         });

@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Revisioner</label>
+                    <label>Author</label>
                     <input value="{{ Auth::user()->user_id }}" type="hidden" name="user_id" id="user_id"
                         class="form-control" required>
                     <input type="text" class="form-control" value="{{ Auth::user()->nama }}" readonly>
@@ -26,7 +26,8 @@
                     <small id="error-barang_id" class="error-text form-text text-danger"></small>
                 </div>
                 <div class="form-group">
-                    <label>Jumlah</label>
+                    <label>Jumlah</label><br>
+                    <small>Gunakan bilangan negatif untuk opname.</small>
                     <input value="" type="number" name="stok_jumlah" id="stok_jumlah" class="form-control"
                         required>
                     <small id="error-stok_jumlah" class="error-text form-text text-danger"></small>
@@ -108,15 +109,17 @@
                 $(element).removeClass('is-invalid');
             }
         });
+        
         // Saat barang dipilih
-        $('#barang_id').on('change', function() {
-            let barangId = $(this).val();
-            let stok = @json($stok);
-            let filteredStok = stok.filter(x => x.barang_id == barangId);
-            filteredStok.sort((a, b) => new Date(b.stok_tanggal) - new Date(a.stok_tanggal));
-            let jumlahLama = filteredStok.length > 0 ? filteredStok[0].stok_jumlah : 0;
-            $('#stok_jumlah').val(jumlahLama);
-        });
+        // gak jadi dipake karena menyesuaikan proses t_stok yang diajarkan pak zawa
+        // $('#barang_id').on('change', function() {
+        //     let barangId = $(this).val();
+        //     let stok = @json($stok);
+        //     let filteredStok = stok.filter(x => x.barang_id == barangId);
+        //     filteredStok.sort((a, b) => new Date(b.stok_tanggal) - new Date(a.stok_tanggal));
+        //     let jumlahLama = filteredStok.length > 0 ? filteredStok[0].stok_jumlah : 0;
+        //     $('#stok_jumlah').val(jumlahLama);
+        // });
 
     });
 </script>

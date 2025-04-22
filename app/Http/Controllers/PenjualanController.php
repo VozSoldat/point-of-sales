@@ -89,14 +89,6 @@ class PenjualanController extends Controller
             $penjualan->penjualan_tanggal = $request->penjualan_tanggal;
             $penjualan->save();
 
-            // foreach ($request->detail as $item) {
-            //     $item = new DetailPenjualan();
-            //     $item->penjualan_id = $penjualan->penjualan_id;
-            //     $item->barang_id = $request->detail->barang_id;
-            //     $item->harga = $request->detail->harga;
-            //     $item->jumlah = $request->detail->jumlah;
-            //     $item->save();
-            // }
 
             for($i = 0; $i < count($request->barang_id); $i++) {
                 $detail = new DetailPenjualan();
@@ -106,19 +98,6 @@ class PenjualanController extends Controller
                 $detail->jumlah = $request->jumlah[$i];
                 $detail->save();
             }
-
-            // $barang_ids = $request->input('detail.barang_id');
-            // $hargas = $request->input('detail.harga');
-            // $jumlahs = $request->input('detail.jumlah');
-
-            // for ($i = 0; $i < count($barang_ids); $i++) {
-            //     $detail = new DetailPenjualan();
-            //     $detail->penjualan_id = $penjualan->penjualan_id;
-            //     $detail->barang_id = $barang_ids[$i];
-            //     $detail->harga = $hargas[$i];
-            //     $detail->jumlah = $jumlahs[$i];
-            //     $detail->save();
-            // }
 
 
             return response()->json([
