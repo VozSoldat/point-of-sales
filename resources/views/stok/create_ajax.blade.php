@@ -32,6 +32,11 @@
                         required>
                     <small id="error-stok_jumlah" class="error-text form-text text-danger"></small>
                 </div>
+                <div class="form-group">
+                    <label for="keterangan">Keterangan</label>
+                    <input type="text" name="keterangan" id="keterangan" class="form-control">
+                    <small id="error-keterangan" class="error-text form-text text-danger"></small>
+                </div>
             </div>
             <input hidden="hidden" type="text" name="stok_tanggal" id="stok_tanggal" value="{{ now() }}">
             <div class="modal-footer"> <button type="button" data-dismiss="modal"
@@ -44,27 +49,10 @@
     $(document).ready(function() {
         $("#form-tambah").validate({
             rules: {
-                kategori_id: {
+                stok_jumlah: {
                     required: true,
-                    number: true
-                },
-                barang_kode: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 20
-                },
-                barang_nama: {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 100
-                },
-                harga_jual: {
-                    required: true,
-                    number: true
-                },
-                harga_beli: {
-                    required: true,
-                    number: true
+                    number: true,
+                    maxlength: 10
                 },
             },
             submitHandler: function(form) {
@@ -109,7 +97,7 @@
                 $(element).removeClass('is-invalid');
             }
         });
-        
+
         // Saat barang dipilih
         // gak jadi dipake karena menyesuaikan proses t_stok yang diajarkan pak zawa
         // $('#barang_id').on('change', function() {

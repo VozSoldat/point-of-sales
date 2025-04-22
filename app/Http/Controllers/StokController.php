@@ -48,6 +48,10 @@ class StokController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
+    public function show($id){
+        $stok = Stok::find($id);
+        return view('stok.show', compact('stok'));
+    }
     public function create_ajax()
     {
         $barang = Barang::select('barang_id', 'barang_nama')->get();
