@@ -5,15 +5,13 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">
-                    Import Supplier
-                </button>
                 <a href="{{ url('/supplier/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i>
                     Export Supplier</a>
                 <a href="{{ url('/supplier/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i>
                     Export Supplier</a>
-                <button onclick="modalAction('{{ url('supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">
-                    Tambah Ajax</button>
+                <button onclick="modalAction('{{ url('penjualan/create_ajax') }}')" class="btn btn-info">
+                    <i class="fa fa-plus"></i>
+                    Input Transaksi</button>
             </div>
         </div>
         <div class="card-body">
@@ -26,12 +24,14 @@
             <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
+                        <th>No</th>
+                        <th>Kasir</th>
+                        <th>Pembeli</th>
+                        <th>Kode Penjualan</th>
+                        <th>Tanggal Penjualan</th>
                         <th>Aksi</th>
                     </tr>
+
                 </thead>
             </table>
         </div>
@@ -56,7 +56,7 @@
             dataUser = $('#table_supplier').DataTable({
                 serverSide: true,
                 ajax: {
-                    "url": "{{ route('supplier.list') }}",
+                    "url": "{{ route('penjualan.list') }}",
                     "dataType": "json",
                     "type": "POST",
                 },
@@ -67,19 +67,25 @@
                         searchable: false
                     },
                     {
-                        data: "supplier_kode",
+                        data: "user.username",
                         className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
-                        data: "supplier_nama",
+                        data: "pembeli",
                         className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
-                        data: "supplier_alamat",
+                        data: "penjualan_kode",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "penjualan_tanggal",
                         className: "",
                         orderable: true,
                         searchable: true

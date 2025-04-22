@@ -5,15 +5,17 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">
-                    Import Supplier
-                </button>
+                {{-- <button onclick="modalAction('{{ url('/supplier/import') }}')" class="btn btn-info">
+                    <i class="fa fa-upload"></i>
+                    Import Stok
+                </button> --}}
                 <a href="{{ url('/supplier/export_excel') }}" class="btn btn-primary"><i class="fa fa-file-excel"></i>
-                    Export Supplier</a>
+                    Export Stok</a>
                 <a href="{{ url('/supplier/export_pdf') }}" class="btn btn-warning"><i class="fa fa-file-pdf"></i>
-                    Export Supplier</a>
-                <button onclick="modalAction('{{ url('supplier/create_ajax') }}')" class="btn btn-sm btn-success mt-1">
-                    Tambah Ajax</button>
+                    Export Stok</a>
+                <button onclick="modalAction('{{ url('stok/create_ajax') }}')" class="btn btn-info">
+                    <i class="fa fa-plus"></i>
+                    Perbarui Stok</button>
             </div>
         </div>
         <div class="card-body">
@@ -23,13 +25,14 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier">
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_stok">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Kode</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
+                        <th>Waktu Perubahan</th>
+                        <th>Nama Barang</th>
+                        <th>Penginput</th>
+                        <th>Jumlah Stok</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -51,12 +54,12 @@
             });
         }
 
-        var dataUser;
+        var dataStok;
         $(document).ready(function() {
-            dataUser = $('#table_supplier').DataTable({
+            dataStok = $('#table_stok').DataTable({
                 serverSide: true,
                 ajax: {
-                    "url": "{{ route('supplier.list') }}",
+                    "url": "{{ route('stok.list') }}",
                     "dataType": "json",
                     "type": "POST",
                 },
@@ -67,19 +70,25 @@
                         searchable: false
                     },
                     {
-                        data: "supplier_kode",
+                        data: "stok_tanggal",
                         className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
-                        data: "supplier_nama",
+                        data: "barang.barang_nama",
                         className: "",
                         orderable: true,
                         searchable: true
                     },
                     {
-                        data: "supplier_alamat",
+                        data: "user.username",
+                        className: "",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "stok_jumlah",
                         className: "",
                         orderable: true,
                         searchable: true
