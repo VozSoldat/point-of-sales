@@ -167,6 +167,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax'])->name('stok.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax'])->name('stok.delete_ajax');
 
+            Route::get('/export_excel', [StokController::class, 'export_excel'])->name('stok.export_excel'); // export excel\
+            Route::get('/export_pdf', [StokController::class, 'export_pdf'])->name('stok.export_pdf');
+
             Route::delete('/{id}', [StokController::class, 'destroy'])->name('stok.destroy');
         });
         Route::prefix('penjualan')->group(function () {

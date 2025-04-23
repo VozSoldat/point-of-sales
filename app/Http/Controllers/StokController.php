@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\Kategori;
 use App\Models\Stok;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Yajra\DataTables\Facades\DataTables;
 
 class StokController extends Controller
@@ -48,7 +51,8 @@ class StokController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-    public function show($id){
+    public function show($id)
+    {
         $stok = Stok::find($id);
         return view('stok.show', compact('stok'));
     }
@@ -164,5 +168,74 @@ class StokController extends Controller
             }
         }
         return redirect('/');
+    }
+
+    public function export_excel()
+    {
+        // ambil data barang yang akan diexport
+
+        $stok = Stok::select('stok_id', 'stok_tanggal', 'stok_jumlah', 'barang_id', 'user_id')
+            ->orderBy('stok_id')
+            ->with(['barang', 'user'])
+            ->get();
+
+        // load library excel
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('B1', 'Tanggal Stok');
+        $sheet->setCellValue('C1', 'Jumlah');
+        $sheet->setCellValue('D1', 'Penginput');
+        $sheet->setCellValue('E1', 'Barang');
+
+        $sheet->getStyle('A1:E1')->getFont()->setBold(true);
+
+        $no = 1; // nomor data dimulai dari 1
+        $baris = 2; // baris data dimulai dari baris ke-2
+        foreach ($stok as $key => $value) {
+            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('B' . $baris, $value->stok_tanggal);
+            $sheet->setCellValue('C' . $baris, $value->stok_jumlah);
+            $sheet->setCellValue('D' . $baris, $value->user->username);
+            $sheet->setCellValue('E' . $baris, $value->barang->barang_nama);
+            $baris++;
+            $no++;
+        }
+
+        // set column size
+        foreach (range('A', 'E') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        $sheet->setTitle('Data Stok');
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $filename = 'Data Stok ' . date('Y-m-d H:i:s') . '.xlsx';
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
+    public function export_pdf()
+    {
+        $stok = Stok::select('stok_id', 'stok_tanggal', 'stok_jumlah', 'barang_id', 'user_id')
+            ->orderBy('stok_id')
+            ->with(['barang', 'user'])
+            ->get();
+        $pdf = Pdf::loadview('stok.export_pdf', compact('stok'));
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption('isRemoteEnabled', true);
+        $pdf->render();
+
+        return $pdf->stream('Data Stok' . date('Y-m-d H:i:s' . ' .pdf'));
     }
 }
