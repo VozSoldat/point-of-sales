@@ -7,6 +7,7 @@ use App\Models\Barang;
 use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
 use App\Models\Stok;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,14 +41,18 @@ class PenjualanController extends Controller
                 // $btn .= '<a href="' . url('/barang/' . $barang->barang_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
                 // $btn .= '<form class="d-inline-block" method="POST" action="' . url('/barang/' . $barang->barang_id) . '">' . csrf_field() . method_field('DELETE') . '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';
 
-                $btn = '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/show_ajax') . '\')" class="btn btn-info btn-sm">Detail</button> ';
-                $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
+                $btn = '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id) . '\')" class="btn btn-info btn-sm">Detail</button> ';
+                // $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/edit_ajax') . '\')" class="btn btn-warning btn-sm">Edit</button> ';
                 $btn .= '<button onclick="modalAction(\'' . url('/penjualan/' . $penjualan->penjualan_id . '/delete_ajax') . '\')" class="btn btn-danger btn-sm">Hapus</button> ';
 
                 return $btn;
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+    public function show($id){
+        $penjualan = Penjualan::find($id);
+        return view('penjualan.show', compact('penjualan'));
     }
     public function create_ajax()
     {
@@ -62,13 +67,16 @@ class PenjualanController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
                 // 'barang_kode' => 'required|string|min:3|unique:m_barang,barang_kode',
-                'pembeli' => 'required|string|max:1000',
+                'pembeli' => 'required|string|max:100',
+                // 'barang_id.*' => 'required|integer',
+                // 'jumlah.*' => 'required|integer',
                 // 'harga_beli' => 'required|integer',
                 // 'harga_jual' => 'required|integer',
                 // 'kategori_id' => 'required|integer'
             ];
 
             $validator = Validator::make($request->all(), $rules);
+
 
             if ($validator->fails()) {
                 return response()->json([
@@ -90,13 +98,23 @@ class PenjualanController extends Controller
             $penjualan->save();
 
 
-            for($i = 0; $i < count($request->barang_id); $i++) {
+
+
+            for ($i = 0; $i < count($request->barang_id); $i++) {
                 $detail = new DetailPenjualan();
                 $detail->penjualan_id = $penjualan->penjualan_id;
                 $detail->barang_id = $request->barang_id[$i];
                 $detail->harga = $request->harga[$i];
                 $detail->jumlah = $request->jumlah[$i];
                 $detail->save();
+
+                Stok::create([
+                    'barang_id' => $request->barang_id[$i],
+                    'user_id' => Auth::user()->user_id,
+                    'stok_tanggal' => $request->penjualan_tanggal,
+                    'stok_jumlah' => ($request->jumlah[$i] * (-1)),
+                    'keterangan' => 'Penjualan barang ' . $request->barang_id[$i] . ',penjualan:'. $penjualan->penjualan_id,
+                ]);
             }
 
 
@@ -106,5 +124,39 @@ class PenjualanController extends Controller
             ]);
         }
         redirect('/');
+    }
+    public function confirm_ajax(string $id)
+    {
+        $penjualan = Penjualan::find($id);
+
+        return view('penjualan.confirm_ajax', compact('penjualan'));
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $penjualan = Penjualan::find($id);
+            if ($penjualan) {
+                try {
+                    $penjualan->detail_penjualan()->delete();
+                    $penjualan->delete();
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Data berhasil dihapus'
+                    ]);
+                } catch (QueryException $e) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data penjualan gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini'
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/');
     }
 }
