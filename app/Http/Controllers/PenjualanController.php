@@ -7,11 +7,15 @@ use App\Models\Barang;
 use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
 use App\Models\Stok;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Yajra\DataTables\Facades\DataTables;
 
 class PenjualanController extends Controller
@@ -50,7 +54,8 @@ class PenjualanController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
-    public function show($id){
+    public function show($id)
+    {
         $penjualan = Penjualan::find($id);
         return view('penjualan.show', compact('penjualan'));
     }
@@ -113,7 +118,7 @@ class PenjualanController extends Controller
                     'user_id' => Auth::user()->user_id,
                     'stok_tanggal' => $request->penjualan_tanggal,
                     'stok_jumlah' => ($request->jumlah[$i] * (-1)),
-                    'keterangan' => 'Penjualan barang ' . $request->barang_id[$i] . ',penjualan:'. $penjualan->penjualan_id,
+                    'keterangan' => 'Penjualan barang ' . $request->barang_id[$i] . ',penjualan:' . $penjualan->penjualan_id,
                 ]);
             }
 
@@ -158,5 +163,95 @@ class PenjualanController extends Controller
             }
         }
         return redirect('/');
+    }
+    public function export_excel()
+    {
+        $semua_penjualan = Penjualan::with('detail_penjualan')->with('user')->orderBy('penjualan_tanggal', 'asc')->get();
+        $penjualan = [];
+
+        foreach ($semua_penjualan as $data) {
+            foreach ($data->detail_penjualan as $item) {
+                $penjualan[] = [
+                    'nama' => $data->user->nama,
+                    'pembeli' => $data->pembeli,
+                    'penjualan_kode' => $data->penjualan_kode,
+                    'tgl_penjualan' => $data->penjualan_tanggal,
+                    'barang' => $item->barang->barang_nama,
+                    'harga' => $item->harga,
+                    'jumlah' => $item->jumlah,
+                    'total' => $item->jumlah * $item->harga,
+                ];
+            }
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Data Stok');
+        $sheet->fromArray(['Nama', 'Pembeli', 'Kode Penjualan', 'Tanggal', 'Barang', 'Harga', 'Jumlah', 'Total'], null, 'A1');
+        $row = 2;
+        $start_merge = $row;
+        foreach ($penjualan as $index => $item) {
+            $sheet->setCellValue("A{$row}", $item['nama']);
+            $sheet->setCellValue("B{$row}", $item['pembeli']);
+            $sheet->setCellValue("C{$row}", $item['penjualan_kode']);
+            $sheet->setCellValue("D{$row}", $item['tgl_penjualan']);
+            $sheet->setCellValue("E{$row}", $item['barang']);
+            $sheet->setCellValue("F{$row}", $item['harga']);
+            $sheet->setCellValue("G{$row}", $item['jumlah']);
+            $sheet->setCellValue("H{$row}", $item['total']);
+            $next = $penjualan[$index + 1]['penjualan_kode'] ?? null;
+            if ($item['penjualan_kode'] !== $next) {
+                if ($start_merge !== $row) {
+                    $sheet->mergeCells("A{$start_merge}:A{$row}");
+                    $sheet->mergeCells("B{$start_merge}:B{$row}");
+                    $sheet->mergeCells("C{$start_merge}:C{$row}");
+                    $sheet->getStyle("A{$start_merge}:C{$row}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                    $sheet->getStyle("A{$start_merge}:C{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                }
+                $start_merge = $row + 1;
+            }
+
+            $row++;
+        }
+
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . 'Data_Penjualan_' . date('Y-m-d_H-i-s') . '.xlsx' . '"');
+        header('Cache-Control: max-age=0');
+        header('Cache-Control: max-age=1');
+        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public');
+
+        $writer->save('php://output');
+        exit;
+    }
+    public function export_pdf()
+    {
+        $penjualan_semua = Penjualan::with('detail_penjualan')->with('user')->orderBy('penjualan_tanggal', 'asc')->get();
+
+        $rekap = [];
+        foreach ($penjualan_semua as $data) {
+            foreach ($data->detail_penjualan as $item) {
+                $rekap[] = [
+                    'nama' => $data->user->nama,
+                    'pembeli' => $data->pembeli,
+                    'penjualan_kode' => $data->penjualan_kode,
+                    'tgl_penjualan' => $data->penjualan_tanggal,
+                    'barang' => $item->barang->barang_nama,
+                    'harga' => $item->harga,
+                    'jumlah' => $item->jumlah,
+                    'total' => $item->jumlah * $item->harga,
+                ];
+            }
+        }
+
+        $pdf = Pdf::loadView('penjualan.export_pdf', ['rekap' => $rekap]);
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->setOptions(["isRemoteEnabled"], true);
+        $pdf->render();
+        return $pdf->stream('Data_Penjualan_' . date('Y-m-d_H-i-s') . '.pdf');
     }
 }

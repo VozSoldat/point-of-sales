@@ -35,7 +35,13 @@
             </div>
 
             <div class="form-group" id="barang-container">
+                @php
+                    $total_harga = 0;
+                @endphp
                 @foreach ($penjualan->detail_penjualan as $item)
+                    @php
+                        $total_harga += $item->barang->harga_jual * $item->jumlah;
+                    @endphp
                     <div class="form-row align-items-end mt-3">
                         <div class="col-md-4">
                             <label for="barang_id[]">Nama Barang</label>
@@ -55,6 +61,11 @@
                     </div>
                 @endforeach
 
+            </div>
+            <div class="form-group">
+                <label for="total_harga">Total Harga</label>
+                <input value="{{ $total_harga }}" type="number" name="total_harga" id="total_harga"
+                    class="form-control" readonly>
             </div>
         </div>
     </div>

@@ -189,6 +189,9 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax'])->name('penjualan.delete_ajax');
 
             Route::delete('/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+
+            Route::get('/export_excel', [PenjualanController::class, 'export_excel'])->name('stok.export_excel'); // export excel\
+            Route::get('/export_pdf', [PenjualanController::class, 'export_pdf'])->name('stok.export_pdf');
         });
     });
     Route::middleware(['authorize:ADM'])->group(function () {

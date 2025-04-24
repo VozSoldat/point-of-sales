@@ -55,10 +55,16 @@
 
                 </div>
                 <button type="button" class="btn btn-primary mt-3" id="tambah-barang">Tambah Barang</button>
+                <div class="form-group">
+                    <label for="total_harga">Total Harga</label>
+                    <input type="number" name="total_harga" id="total_harga" class="form-control" readonly>
+                </div>
             </div>
-            <div class="modal-footer"> <button type="button" data-dismiss="modal"
-                    class="btn btn-warning">Batal</button> <button type="submit"
-                    class="btn btn-primary">Simpan</button> </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
         </div>
     </div>
 </form>
@@ -186,6 +192,16 @@
         // hapus baris saat tombol .remove-row diklik
         $('#barang-container').on('click', '.remove-row', function() {
             $(this).closest('.form-row').remove();
+        });
+        // Jumlahkan harga
+        $('#barang-container').on('change', 'input[name="harga[]"], input[name="jumlah[]"]', function() {
+            var totalHarga = 0;
+            $('#barang-container .form-row').each(function() {
+                var harga = $(this).find('input[name="harga[]"]').val();
+                var jumlah = $(this).find('input[name="jumlah[]"]').val();
+                totalHarga += harga * jumlah;
+            });
+            $('#total_harga').val(totalHarga);
         });
 
     });
