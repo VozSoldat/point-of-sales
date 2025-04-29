@@ -66,7 +66,6 @@ class PenjualanController extends Controller
         $stok = Stok::select('stok_id', 'barang_id', 'stok_tanggal', 'stok_jumlah')->with('barang')->get();
         return view('penjualan.create_ajax', compact('barang', 'stok'));
     }
-
     public function store_ajax(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -143,7 +142,11 @@ class PenjualanController extends Controller
             $penjualan = Penjualan::find($id);
             if ($penjualan) {
                 try {
+                    $penjualan->detail_penjualan->each(function ($detail) {
+                        $detail->delete();
+                    });
                     $penjualan->detail_penjualan()->delete();
+
                     $penjualan->delete();
                     return response()->json([
                         'status' => true,
@@ -253,5 +256,45 @@ class PenjualanController extends Controller
         $pdf->setOptions(["isRemoteEnabled"], true);
         $pdf->render();
         return $pdf->stream('Data_Penjualan_' . date('Y-m-d_H-i-s') . '.pdf');
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $penjualan = Barang::find($id);
+        $detail = DetailPenjualan::select('detail_id', 'barang_id', 'harga', 'jumlah')->with('barang')->get();
+
+        return view('penjualan.edit_ajax', compact('barang', 'pejualan'));
+    }
+    public function update_ajax(Request $request, $id)
+    { // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'barang_kode' => 'required|string|min:3|unique:m_barang,barang_kode, ' . $id . ',barang_id',
+                'barang_nama' => 'required|string|max:100',
+                'harga_beli' => 'required|integer',
+                'harga_jual' => 'required|integer',
+                'kategori_id' => 'required|integer'
+            ];
+            // use Illuminate\Support\Facades\Validator;
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false, // respon json, true: berhasil, false: gagal
+                    'message' => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // menunjukkan field mana yang error
+                ]);
+            }
+            $check = Barang::find($id);
+            if ($check) {
+                // if (!$request->filled('password')) { // jika password tidak diisi, maka hapus dari request
+                //     $request->request->remove('password');
+                // }
+                $check->update($request->all());
+                return response()->json(['status' => true, 'message' => 'Data berhasil diupdate']);
+            } else {
+                return response()->json(['status' => false, 'message' => 'Data tidak ditemukan']);
+            }
+        }
+        return redirect('/');
     }
 }

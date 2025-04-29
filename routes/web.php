@@ -185,6 +185,9 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax'])->name('penjualan.edit_ajax');
             Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax'])->name('penjualan.update_ajax');
 
+            Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax'])->name('stok.edit_ajax');
+            Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax'])->name('stok.update_ajax');
+
             Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax'])->name('penjualan.confirm_ajax');
             Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax'])->name('penjualan.delete_ajax');
 
