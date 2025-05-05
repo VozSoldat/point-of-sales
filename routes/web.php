@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\FoodBeverageController;
@@ -35,6 +36,8 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout')->middlew
 
 Route::get('register', [AuthController::class, 'register'])->name('register');
 Route::post('register', [AuthController::class, 'postRegister']);
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
