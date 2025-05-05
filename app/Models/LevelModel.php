@@ -13,4 +13,9 @@ class LevelModel extends Model
     protected $table = 'm_level';
     protected $primaryKey = 'level_id';
     protected $guarded = [];
+
+    // public function getRouteKeyName()
+    // {
+    //     return 'level_kode';
+    // }
 }
