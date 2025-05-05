@@ -41,4 +41,7 @@ class UserModel extends Authenticatable implements JWTSubject
     {
         return $this->getRole() == $role;
     }
+    public function getRouteKeyName(){
+        return 'user_id';
+    }
 }
