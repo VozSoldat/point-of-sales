@@ -21,6 +21,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <li class="user-header bg-primary">
+                    {{-- <img src="{{ asset(Auth::user()->foto_profil ? 'storage/profile-photo/profile-' . Auth::user()->user_id . '.png' : 'adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image"> --}}
                     <img src="{{ asset(Auth::user()->foto_profil ? 'storage/profile-photo/profile-' . Auth::user()->user_id . '.png' : 'adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
                     <p>
                         Alexander Pierce - Web Developer
